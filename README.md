@@ -1,4 +1,4 @@
-# falsk+前端制作教务系统
+# falsk+前端-教务系统
 
 1.安装
     pip install -r requirements.txt
