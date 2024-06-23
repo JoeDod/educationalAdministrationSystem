@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎您，教务系统管理员{{username}}</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .tab-content>.tab-pane {
+            display: none;
+        }
+
+        .tab-content>.active {
+            display: block;
+        }
+    </style>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/static/js/admin.js"></script>
+
+</head>
+
+<body>
+    <!-- 顶部菜单栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">教务系统管理员</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav nav-tabs">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#student-management" data-toggle="tab">学生管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#teacher-management" data-toggle="tab">教师管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#course-management" data-toggle="tab">课程管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#grade-management" data-toggle="tab">成绩管理</a>
+                </li>
+                <li> <a href="/logout" class="btn btn-danger">退出登录</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="tab-content container mt-5">
+        <!-- 学生管理 -->
+        <div id="student-management" class="tab-pane fade in active">
+            <h2>学生管理</h2>
+            <div class="form-inline">
+                <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#addStudentModal">增加学生</button>
+                <input type="text" id="studentSearch" class="form-control mr-2" placeholder="请输入学号">
+                <button onclick="findStudent()" class="btn btn-primary ml-2" type="button">查找</button>
+            </div>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>班级</th>
+                        <th>专业</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="student-table-body">
+                    <!-- 这里可以用后端数据填充 -->
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination" id="student-table-body-pagination">
+                    <li class="page-item"><a class="page-link" href="#" data-page="1">122</a></li>
+                    <!-- 更多分页按钮 -->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 教师管理 -->
+        <div id="teacher-management" class="tab-pane fade">
+            <h2>教师管理</h2>
+            <div class="form-inline">
+                <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#addTeacherModal">增加教师</button>
+                <input type="text" id="teacherSearch" class="form-control mr-2" placeholder="请输入教师编号">
+                <button onclick="findTeacher()" class="btn btn-primary ml-2" type="button">查找</button>
+            </div>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>教师编号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>年龄</th>
+                        <th>职称</th>
+                        <th>邮箱</th>
+                        <th>密码</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="teacher-table-body">
+                    <!-- 这里可以用后台数据动态生成 -->
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination" id="teacher-table-body-pagination">
+                    <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
+                    <!-- 更多分页按钮 -->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 课程管理 -->
+        <div id="course-management" class="tab-pane fade">
+            <h2>课程管理</h2>
+            <div class="form-inline">
+                <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#addCourseModal">增加课程</button>
+                <input type="text" id="courseSearch" class="form-control mr-2" placeholder="请输入课程号">
+                <button onclick="findCourse()" class="btn btn-primary ml-2" type="button">查找
+            </div>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>课程编号</th>
+                        <th>教师编号</th>
+                        <th>课程名称</th>
+                        <th>课程类型</th>
+                        <th>年级</th>
+                        <th>学分</th>
+                        <th>地点</th>
+                        <th>时间</th>
+                        <th>起始周-结束周</th>
+                        <th>未选择/总容量</th>
+                        <th>正常：1，未开课：0</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="course-table-body">
+                    <!-- 这里可以用后台数据动态生成 -->
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination" id="course-table-body-pagination">
+                    <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
+                    <!-- 更多分页按钮 -->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 成绩管理 -->
+        <div id="grade-management" class="tab-pane fade">
+            <h2>成绩管理</h2>
+            <div class="form-inline">
+                <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#addGradeModal">增加成绩</button>
+                <input type="text" id="gradeSearch" class="form-control mr-2" placeholder="请输入课程号">
+                <input type="text" id="studentSearchId" class="form-control mr-2" placeholder="请输入学生学号">
+                <button onclick="findScore()" class="btn btn-primary ml-2" type="button">查找</button>
+            </div>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>课程编号</th>
+                        <th>课程名称</th>
+                        <th>学生学号</th>
+                        <th>学生姓名</th>
+                        <th>成绩</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="grade-table-body">
+                    <!-- 这里可以用后台数据动态生成 -->
+
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination" id="grade-table-body-pagination">
+                    <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
+                    <!-- 更多分页按钮 -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 模态框代码 -->
+    <!-- 增加学生模态框 -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStudentModalLabel">增加学生</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form action="" method="post" id="addStudentForm">
+                        <div class="form-group">
+                            <label for="stu_id">学号</label>
+                            <input type="text" class="form-control" id="stu_id" name="stu_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stu_name">姓名</label>
+                            <input type="text" class="form-control" id="stu_name" name="stu_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stu_sex">性别</label>
+                            <select name="stu_sex" id="stu_sex" class="form-control" required>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="stu_age">年龄</label>
+                            <input type="text" class="form-control" id="stu_age" name="stu_age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">学院</label>
+                            <input type="text" class="form-control" id="department" name="department" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stu_major">专业</label>
+                            <input type="text" class="form-control" id="stu_major" name="stu_major" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stu_grade">年级</label>
+                            <input type="text" class="form-control" id="stu_grade" name="stu_grade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stu_class">班级</label>
+                            <input type="text" class="form-control" id="stu_class" name="stu_class" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">手机号</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">邮箱</label>
+                            <input type="text" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">密码</label>
+                            <input type="text" class="form-control" id="pwd" name="pwd" required>
+                        </div>
+                    </form>
+                    <button type="submit" class="btn btn-primary" onclick="saveStudentInfo()">保存</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 查看学生模态框 -->
+    <div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewStudentModalLabel">查看学生信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="viewStudentForm">
+                        <div class="form-group">
+                            <label for="viewStudentId">学号</label>
+                            <input type="text" class="form-control" id="viewStudentId" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentName">姓名</label>
+                            <input type="text" class="form-control" id="viewStudentName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentGender">性别</label>
+                            <input type="text" class="form-control" id="viewStudentGender" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentAge">年龄</label>
+                            <input type="text" class="form-control" id="viewStudentAge" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentCollege">学院</label>
+                            <input type="text" class="form-control" id="viewStudentCollege" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentMajor">专业</label>
+                            <input type="text" class="form-control" id="viewStudentMajor" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentGrade">年级</label>
+                            <input type="text" class="form-control" id="viewStudentGrade" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentClass">班级</label>
+                            <input type="text" class="form-control" id="viewStudentClass" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentPhone">手机号</label>
+                            <input type="text" class="form-control" id="viewStudentPhone" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentEmail">邮箱</label>
+                            <input type="text" class="form-control" id="viewStudentEmail" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewStudentPwd">密码</label>
+                            <input type="text" class="form-control" id="viewStudentPwd" readonly>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改学生模态框 -->
+    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editStudentModalLabel">修改学生信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateStudentForm">
+                        <div class="form-group">
+                            <label for="alter_stu_id">学号</label>
+                            <input type="text" class="form-control" id="alter_stu_id" name="stu_id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_stu_name">姓名</label>
+                            <input type="text" class="form-control" id="alter_stu_name" name="stu_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_stu_sex">性别</label>
+                            <select name="stu_sex" id="alter_stu_sex" class="form-control" required>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_stu_age">年龄</label>
+                            <input type="text" class="form-control" id="alter_stu_age" name="stu_age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_department">学院</label>
+                            <input type="text" class="form-control" id="alter_department" name="department" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_stu_major">专业</label>
+                            <input type="text" class="form-control" id="alter_stu_major" name="stu_major" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_stu_grade">年级</label>
+                            <input type="text" class="form-control" id="alter_stu_grade" name="stu_grade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_stu_class">班级</label>
+                            <input type="text" class="form-control" id="alter_stu_class" name="stu_class" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_phone">手机号</label>
+                            <input type="text" class="form-control" id="alter_phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_email">邮箱</label>
+                            <input type="text" class="form-control" id="alter_email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alter_pwd">密码</label>
+                            <input type="text" class="form-control" id="alter_pwd" name="pwd" required>
+                        </div>
+                    </form>
+                    <button type="submit" class="btn btn-primary" onclick="updateStudent()">保存修改</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 增加教师模态框 -->
+    <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTeacherModalLabel">增加教师</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addTeacherForm">
+                        <div class="form-group">
+                            <label for="teacher_id">教师编号</label>
+                            <input type="text" class="form-control" id="teacher_id" name="teacher_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher_name">姓名</label>
+                            <input type="text" class="form-control" id="teacher_name" name="teacher_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher_sex">性别</label>
+                            <select name="teacher_sex" class="form-control" id="teacher_sex">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher_age">年龄</label>
+                            <input type="text" class="form-control" id="teacher_age" name="teacher_age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher_title">职称</label>
+                            <input type="text" class="form-control" id="teacher_title" name="teacher_title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">邮箱</label>
+                            <input type="text" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">密码</label>
+                            <input type="text" class="form-control" id="pwd" name="pwd" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="addTeacher()">保存</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改教师模态框 -->
+    <div class="modal fade" id="editTeacherModal" tabindex="-1" aria-labelledby="editTeacherModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTeacherModalLabel">修改教师信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editTeacherForm">
+                        <div class="form-group">
+                            <label for="edit_teacher_id">教师编号</label>
+                            <input type="text" class="form-control" id="edit_teacher_id" name="teacher_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_teacher_name">姓名</label>
+                            <input type="text" class="form-control" id="edit_teacher_name" name="teacher_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_teacher_sex">性别</label>
+                            <select name="teacher_sex" class="form-control" id="edit_teacher_sex">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_teacher_age">年龄</label>
+                            <input type="text" class="form-control" id="edit_teacher_age" name="teacher_age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_teacher_title">职称</label>
+                            <input type="text" class="form-control" id="edit_teacher_title" name="teacher_title"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_email">邮箱</label>
+                            <input type="text" class="form-control" id="edit_email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_pwd">密码</label>
+                            <input type="text" class="form-control" id="edit_pwd" name="pwd" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="updateTeacher()">保存</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 增加课程模态框 -->
+    <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCourseModalLabel">增加课程</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCourseForm">
+                        <div class="form-group">
+                            <label for="course_id">课程编号</label>
+                            <input type="text" class="form-control" id="course_id" name="course_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher_id">教师编号</label>
+                            <input type="text" class="form-control" id="teacher_id" name="teacher_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="course_name">课程名称</label>
+                            <input type="text" class="form-control" id="course_name" name="course_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class_type">课程类型</label>
+                            <select name="class_type" id="class_type" class="form-control" required>
+                                <option value="必修">必修</option>
+                                <option value="选修">选修</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade">年级</label>
+                            <input type="text" class="form-control" id="grade" name="grade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="credits">学分</label>
+                            <input type="text" class="form-control" id="credits" name="credits" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">地点</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class_time">时间</label>
+                            <input type="text" class="form-control" id="class_time" name="class_time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="start_week">起始周</label>
+                            <input type="text" class="form-control" id="start_week" name="start_week" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_week">结束周</label>
+                            <input type="text" class="form-control" id="end_week" name="end_week" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class_remain">剩余容量</label>
+                            <input type="text" class="form-control" id="class_remain" name="class_remain" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class_capacity">总容量</label>
+                            <input type="text" class="form-control" id="class_capacity" name="class_capacity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class_status">状态</label>
+                            <select name="class_status" id="class_status" class="form-control" required>
+                                <option value="1">正常</option>
+                                <option value="0">停课</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="addCourse()">保存</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 增加成绩模态框 -->
+    <div class="modal fade" id="addGradeModal" tabindex="-1" aria-labelledby="addGradeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGradeModalLabel">增加成绩</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addScoreForm">
+                        <div class="form-group">
+                            <label for="studentGradeId">学生学号</label>
+                            <input type="text" class="form-control" id="studentGradeId" name="student_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="courseGradeId">课程编号</label>
+                            <input type="text" class="form-control" id="courseGradeId" name="course_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade">成绩</label>
+                            <input type="number" class="form-control" id="grade" name="score" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="addScore()">保存</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改成绩模态框 -->
+    <div class="modal fade" id="editScoreModal" tabindex="-1" aria-labelledby="editScoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editScoreModalLabel">修改成绩</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editScoreForm">
+                        <div class="form-group">
+                            <label for="student_id">学生学号</label>
+                            <input type="text" class="form-control" id="student_id" name="student_id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="course_id">课程编号</label>
+                            <input type="text" class="form-control" id="courseId" name="course_id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="score">成绩</label>
+                            <input type="number" class="form-control" id="score" name="score" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="editScore()">保存</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+</body>
+
+</html>
