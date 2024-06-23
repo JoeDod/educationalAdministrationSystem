@@ -1,0 +1,68 @@
+# 管理员表
+CREATE TABLE `Admin` (
+  `admin_id` varchar(20) NOT NULL,
+  `admin_name` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `pwd` varchar(255) NOT NULL,
+  PRIMARY KEY (`admin_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+# 课程信息表
+CREATE TABLE `CourseInformation` (
+  `course_id` varchar(20) NOT NULL COMMENT '课程号',
+  `course_name` varchar(100) NOT NULL COMMENT '课程名',
+  `class_type` enum('选修','必修') DEFAULT NULL COMMENT '课程类型',
+  `credits` int NOT NULL COMMENT '学分',
+  `grade` int NOT NULL COMMENT '年级',
+  `teacher_id` varchar(12) NOT NULL COMMENT '教师号',
+  `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '上课地点',
+  `class_time` json DEFAULT NULL COMMENT '上课时间',
+  `start_week` int NOT NULL COMMENT '开始周',
+  `end_week` int NOT NULL COMMENT '结束周',
+  `class_capacity` int DEFAULT '255' COMMENT '课程容量',
+  `class_remain` int DEFAULT NULL COMMENT '剩余容量',
+  `class_status` enum('0','1') DEFAULT '0' COMMENT '课程状态：0不可选，1可选',
+  PRIMARY KEY (`course_id`),
+  KEY `teacher_id` (`teacher_id`),
+  CONSTRAINT `CourseInformation_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`teacher_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+# 成绩表
+CREATE TABLE `Score` (
+  `student_id` varchar(12) NOT NULL COMMENT '学号',
+  `course_id` varchar(20) NOT NULL COMMENT '课程号',
+  `score` int DEFAULT '0' COMMENT '成绩',
+  PRIMARY KEY (`student_id`,`course_id`),
+  KEY `course_id` (`course_id`),
+  CONSTRAINT `Score_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `Student` (`stu_id`) ON DELETE CASCADE,
+  CONSTRAINT `Score_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `CourseInformation` (`course_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+# 学生表
+CREATE TABLE `Student` (
+  `stu_id` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '男' COMMENT '学号',
+  `stu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '男' COMMENT '姓名',
+  `stu_sex` enum('男','女') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '男' COMMENT '性别',
+  `stu_class` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '18' COMMENT '班级号',
+  `stu_major` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '18' COMMENT '专业名称',
+  `stu_grade` int NOT NULL DEFAULT '18' COMMENT '年级',
+  `phone` varchar(20) NOT NULL COMMENT '手机号',
+  `pwd` varchar(255) NOT NULL COMMENT '密码',
+  `stu_age` int NOT NULL DEFAULT '18' COMMENT '年龄',
+  `department` varchar(255) NOT NULL COMMENT '学院',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  PRIMARY KEY (`stu_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+# 教师表
+CREATE TABLE `Teacher` (
+  `teacher_id` varchar(12) NOT NULL COMMENT '教师号',
+  `teacher_name` varchar(50) NOT NULL COMMENT '教师姓名',
+  `pwd` varchar(255) NOT NULL COMMENT '密码',
+  `teacher_sex` enum('男','女') DEFAULT NULL COMMENT '性别',
+  `teacher_age` int DEFAULT NULL COMMENT '年龄',
+  `teacher_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '职称',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  PRIMARY KEY (`teacher_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
